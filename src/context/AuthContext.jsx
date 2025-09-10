@@ -1,7 +1,4 @@
 /** @format */
-
-import type { ReactNode } from 'react';
-// src/AuthContext.tsx
 import {
 	createContext,
 	useContext,
@@ -13,7 +10,6 @@ import {
 	onAuthStateChanged,
 	signInWithPopup,
 	signOut,
-	type User,
 } from 'firebase/auth';
 
 import {
@@ -21,20 +17,10 @@ import {
 	googleProvider,
 } from '../firebase';
 
-type AuthContextType = {
-	user: User | null;
-	loginWithGoogle: () => Promise<void>;
-	logout: () => Promise<void>;
-};
+const AuthContext = (createContext < AuthContextType) | (undefined > undefined);
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
-
-interface AuthProviderProps {
-	children: ReactNode;
-}
-
-export const AuthProvider = ({ children }: AuthProviderProps) => {
-	const [user, setUser] = useState<User | null>(null);
+export const AuthProvider = ({ children }) => {
+	const [user, setUser] = (useState < User) | (null > null);
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
