@@ -1,9 +1,8 @@
 /** @format */
 
-import { useNavigate } from 'react-router';
+import { useNavigate } from "react-router";
 
-// src/pages/Login.tsx
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from "../context/AuthContext";
 
 export default function Login() {
 	const { loginWithGoogle } = useAuth();

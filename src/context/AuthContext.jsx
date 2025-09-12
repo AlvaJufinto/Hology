@@ -1,26 +1,14 @@
 /** @format */
-import {
-	createContext,
-	useContext,
-	useEffect,
-	useState,
-} from 'react';
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
 
-import {
-	onAuthStateChanged,
-	signInWithPopup,
-	signOut,
-} from 'firebase/auth';
+import { onAuthStateChanged, signInWithPopup, signOut } from "firebase/auth";
 
-import {
-	auth,
-	googleProvider,
-} from '../firebase';
+import { auth, googleProvider } from "../firebase";
 
-const AuthContext = (createContext < AuthContextType) | (undefined > undefined);
+export const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
-	const [user, setUser] = (useState < User) | (null > null);
+	const [user, setUser] = useState(null);
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
@@ -28,31 +16,28 @@ export const AuthProvider = ({ children }) => {
 			setUser(currentUser);
 			setLoading(false);
 		});
-
-		return () => unsubscribe();
+		return unsubscribe;
 	}, []);
 
-	// 👉 Google login function
 	const loginWithGoogle = async () => {
 		await signInWithPopup(auth, googleProvider);
 	};
 
-	// 👉 Logout function
 	const logout = async () => {
 		await signOut(auth);
 	};
 
+	const value = useMemo(() => ({ user, loginWithGoogle, logout }), [user]);
+
 	return (
-		<AuthContext.Provider value={{ user, loginWithGoogle, logout }}>
+		<AuthContext.Provider value={value}>
 			{!loading && children}
 		</AuthContext.Provider>
 	);
 };
 
 export const useAuth = () => {
-	const context = useContext(AuthContext);
-	if (!context) {
-		throw new Error("useAuth must be used within an AuthProvider");
-	}
-	return context;
+	const ctx = useContext(AuthContext);
+	if (!ctx) throw new Error("useAuth must be used within an AuthProvider");
+	return ctx;
 };
