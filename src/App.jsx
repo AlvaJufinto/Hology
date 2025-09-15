@@ -4,16 +4,18 @@ import "./App.css";
 
 import { BrowserRouter, Route, Routes } from "react-router";
 
-import Home from "./pages/Home";
-import Login from "./pages/Login";
-import PrivateRoute from "./PrivateRoute";
-import Dashboard from "./pages/Dashboard/Dashboard";
+import PrivateRoute from "./components/shared/PrivateRoute";
 import Assets from "./pages/Dashboard/Assets";
-import AssetsEdit from "./pages/Dashboard/AssetsEdit";
+import AssetsCreate from "./pages/Dashboard/AssetsCreate";
 import AssetsView from "./pages/Dashboard/AssetsView";
+import AssetsEdit from "./pages/Dashboard/AssetsEdit";
+import Dashboard from "./pages/Dashboard/Dashboard";
+import DevSeed from "./pages/Dashboard/DevSeed";
 import Help from "./pages/Dashboard/Help";
 import NotaryFinder from "./pages/Dashboard/NotaryFinder";
 import Reports from "./pages/Dashboard/Reports";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
 
 function App() {
   return (
@@ -25,7 +27,7 @@ function App() {
           path="/dashboard"
           element={
             <PrivateRoute>
-              <Dashboard></Dashboard>
+              <Dashboard />
             </PrivateRoute>
           }
         />
@@ -33,7 +35,31 @@ function App() {
           path="/assets"
           element={
             <PrivateRoute>
-              <Assets></Assets>
+              <Assets />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/assets/create"
+          element={
+            <PrivateRoute>
+              <AssetsCreate />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/assets/view/:id"
+          element={
+            <PrivateRoute>
+              <AssetsView />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/assets/edit/:id"
+          element={
+            <PrivateRoute>
+              <AssetsEdit />
             </PrivateRoute>
           }
         />
@@ -41,7 +67,7 @@ function App() {
           path="/help"
           element={
             <PrivateRoute>
-              <Help></Help>
+              <Help />
             </PrivateRoute>
           }
         />
@@ -49,7 +75,7 @@ function App() {
           path="/notary-finder"
           element={
             <PrivateRoute>
-              <NotaryFinder></NotaryFinder>
+              <NotaryFinder />
             </PrivateRoute>
           }
         />
@@ -57,7 +83,15 @@ function App() {
           path="/reports"
           element={
             <PrivateRoute>
-              <Reports></Reports>
+              <Reports />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/seeds"
+          element={
+            <PrivateRoute>
+              <DevSeed />
             </PrivateRoute>
           }
         />

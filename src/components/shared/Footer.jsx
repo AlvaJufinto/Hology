@@ -10,7 +10,7 @@ import {
 	Phone,
 	Twitter,
 } from "lucide-react";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 
 import Logo from "../../assets/logo/logo-2.svg";
 
