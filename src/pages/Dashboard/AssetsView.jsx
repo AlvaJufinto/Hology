@@ -25,7 +25,7 @@ import {
   CheckCircle,
   Home,
 } from "lucide-react";
-import Layout from "./Layout";
+import Layout from "../../components/shared/Layout";
 
 const AssetsView = () => {
   const navigate = useNavigate();

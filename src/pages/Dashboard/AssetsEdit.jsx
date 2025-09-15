@@ -11,7 +11,7 @@ import {
   FileText,
   Save,
 } from "lucide-react";
-import Layout from "./Layout";
+import Layout from "../../components/shared/Layout";
 
 const AssetsEdit = () => {
   const navigate = useNavigate();
