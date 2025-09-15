@@ -4,7 +4,7 @@ import Coins from "../assets/icon/home/coins.svg";
 import Growth from "../assets/icon/home/growth.svg";
 import Home from "../assets/icon/home/home.svg";
 import Shield from "../assets/icon/home/shield.svg";
-import Navbar from "./shared/Navbar";
+import Navbar from "../shared/Navbar";
 
 const Hero = () => {
 	return (

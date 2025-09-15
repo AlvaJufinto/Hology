@@ -19,7 +19,7 @@ const Navbar = () => {
 					<Link to="/">Home</Link>
 					<Link>Feature</Link>
 					<Link>About Us</Link>
-					<Link className="bg-teal-700 px-5 py-2 rounded-lg">Sign-In</Link>
+					<Link className="bg-teal-700 px-5 py-2 rounded-lg">Sign In</Link>
 				</div>
 				<button
 					onClick={() => setIsOpen(!isOpen)}
