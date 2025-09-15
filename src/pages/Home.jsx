@@ -1,12 +1,14 @@
 /** @format */
 
 import Hero from "../components/Hero";
+import Navbar from "../components/shared/Navbar";
 
 export default function Home() {
 	return (
 		<>
 			<div className="bg-[url('./assets/bg/bg-1.png')] bg-cover bg-no-repeat bg-center">
-				<Hero />
+			<Navbar />
+			<Hero />
 			</div>
 			<div className="bg-[url('./assets/bg/bg-2.png')] bg-cover bg-no-repeat bg-center">
 				<div className="max-w-screen-2xl mx-auto flex flex-col items-center text-center px-4 md:px-6 min-h-screen py-20">
