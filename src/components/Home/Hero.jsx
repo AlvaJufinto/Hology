@@ -7,7 +7,7 @@ import Shield from "../../assets/icon/home/shield.svg";
 
 const Hero = () => {
   return (
-    <div className="max-w-screen-2xl mx-auto flex flex-col lg:flex-row items-center justify-center lg:justify-between min-h-screen pt-24 md:pt-16 sm:pt-38 pb-10 md:px-0 px-16">
+    <div className="max-w-screen-2xl mx-auto flex flex-col lg:flex-row items-center justify-center lg:justify-between min-h-screen pt-24 md:pt-16 sm:pt-38 pb-10 md:px-20 px-16">
       <div className="w-full lg:w-1/2 flex flex-col gap-6 lg:gap-10 text-center lg:text-left mb-8 lg:mb-0">
         <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
           Kelola Aset <br />
