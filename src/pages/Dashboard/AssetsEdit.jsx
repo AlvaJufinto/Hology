@@ -1,5 +1,3 @@
-"use client";
-
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
@@ -12,10 +10,13 @@ import {
   Save,
 } from "lucide-react";
 import Layout from "../../components/shared/Layout";
+import { auth } from "../../dev/firebase";
+import { getAsset, updateAsset } from "../../services/assets";
+import { onAuthStateChanged } from "firebase/auth";
 
 const AssetsEdit = () => {
   const navigate = useNavigate();
-  const { id } = useParams();
+  const { id } = useParams(); // Get asset ID from the URL
   const [formData, setFormData] = useState({
     name: "",
     type: "",
@@ -24,9 +25,11 @@ const AssetsEdit = () => {
     purchaseDate: "",
     location: "",
     description: "",
-    documents: [],
+    documents: [], // This will hold existing docs (as URLs) and new files (as File objects)
   });
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true); // Start true to indicate initial data fetch
+  const [saving, setSaving] = useState(false); // For the submit button
+  const [userId, setUserId] = useState(null);
 
   const assetTypes = [
     "Real Estate",
@@ -38,22 +41,43 @@ const AssetsEdit = () => {
     "Other",
   ];
 
-  // Simulate loading existing asset data
+  // Step 1: Fetch existing asset data from Firestore
   useEffect(() => {
-    // Mock data for the asset being edited
-    const mockAsset = {
-      name: "Downtown Apartment",
-      type: "Real Estate",
-      purchaseValue: "380000",
-      currentValue: "450000",
-      purchaseDate: "2022-03-15",
-      location: "New York, NY",
-      description:
-        "Modern 2-bedroom apartment in downtown Manhattan with city views.",
-      documents: [],
-    };
-    setFormData(mockAsset);
-  }, [id]);
+    if (!id) return;
+
+    const unsub = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUserId(user.uid);
+        const fetchAssetData = async () => {
+          try {
+            const assetData = await getAsset(user.uid, id);
+            if (assetData) {
+              // Format date for the input field (Firebase timestamp -> YYYY-MM-DD)
+              const purchaseDate = assetData.purchaseDate?.toDate
+                ? assetData.purchaseDate.toDate().toISOString().split("T")[0]
+                : "";
+
+              const documents = assetData.documents || [];
+
+              setFormData({ ...assetData, purchaseDate, documents });
+            } else {
+              console.error("Asset not found!");
+              navigate("/assets"); // Redirect if asset doesn't exist
+            }
+          } catch (error) {
+            console.error("Error fetching asset:", error);
+          } finally {
+            setLoading(false);
+          }
+        };
+        fetchAssetData();
+      } else {
+        navigate("/login");
+      }
+    });
+
+    return () => unsub();
+  }, [id, navigate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -64,29 +88,49 @@ const AssetsEdit = () => {
   };
 
   const handleFileUpload = (e) => {
-    const files = Array.from(e.target.files);
+    const newFiles = Array.from(e.target.files);
     setFormData((prev) => ({
       ...prev,
-      documents: [...prev.documents, ...files],
+      documents: [...prev.documents, ...newFiles],
     }));
   };
 
   const removeDocument = (index) => {
+    // Note: This only removes from the UI. Deletion from storage happens on save.
     setFormData((prev) => ({
       ...prev,
       documents: prev.documents.filter((_, i) => i !== index),
     }));
   };
 
+  // Step 2: Update the asset in Firestore and upload new files to Storage
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
+    if (!userId) {
+      console.error("No user logged in.");
+      return;
+    }
+    setSaving(true);
 
-    // Simulate API call
-    setTimeout(() => {
-      setLoading(false);
+    try {
+      // Separate existing document URLs from new File objects
+      const existingDocs = formData.documents.filter(
+        (doc) => typeof doc === "string"
+      );
+      const newFiles = formData.documents.filter(
+        (doc) => typeof doc !== "string"
+      );
+
+      // Pass the form data, user ID, asset ID, and new files to the service
+      await updateAsset(userId, id, formData, newFiles, existingDocs);
+
       navigate("/assets");
-    }, 1000);
+    } catch (error) {
+      console.error("Error updating asset:", error);
+      alert("Failed to update asset. Please try again.");
+    } finally {
+      setSaving(false);
+    }
   };
 
   const currentValue = Number.parseFloat(formData.currentValue) || 0;

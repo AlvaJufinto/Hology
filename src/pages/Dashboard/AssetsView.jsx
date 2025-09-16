@@ -1,6 +1,4 @@
-"use client";
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import {
   LineChart,
@@ -26,38 +24,61 @@ import {
   Home,
 } from "lucide-react";
 import Layout from "../../components/shared/Layout";
+// Import Firebase auth and the getAsset service function
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "../../dev/firebase";
+import { getAsset } from "../../services/assets";
 
 const AssetsView = () => {
   const navigate = useNavigate();
   const { id } = useParams();
+  const [asset, setAsset] = useState(null); // State to hold the fetched asset
+  const [loading, setLoading] = useState(true); // State for loading indicator
   const [selectedPeriod, setSelectedPeriod] = useState("1Y");
 
-  // Mock asset data
-  const asset = {
-    id: 1,
-    name: "Downtown Apartment",
-    type: "Real Estate",
-    currentValue: 450000,
-    purchaseValue: 380000,
-    purchaseDate: "2022-03-15",
-    location: "New York, NY",
-    description:
-      "Modern 2-bedroom apartment in downtown Manhattan with city views and premium amenities.",
-    status: "Active",
-    lastUpdated: "2024-01-15",
-  };
+  // --- Data Fetching Effect ---
+  useEffect(() => {
+    // This function runs when the component mounts or the 'id' changes
+    const unsub = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        const fetchAssetData = async () => {
+          try {
+            const assetData = await getAsset(user.uid, id);
+            if (assetData) {
+              setAsset(assetData);
+            } else {
+              console.error("Asset not found or access denied.");
+              // Optionally, redirect to a 'not found' page or back to the list
+              navigate("/assets");
+            }
+          } catch (error) {
+            console.error("Failed to fetch asset:", error);
+          } finally {
+            setLoading(false);
+          }
+        };
+        fetchAssetData();
+      } else {
+        // If no user is logged in, redirect to login
+        navigate("/login");
+      }
+    });
 
-  // Mock historical data for charts
+    // Cleanup the auth listener when the component unmounts
+    return () => unsub();
+  }, [id, navigate]);
+
+  // Mock historical data for charts (can be integrated later)
   const historicalData = [
-    { month: "Mar 2022", value: 380000, predicted: false },
-    { month: "Jun 2022", value: 385000, predicted: false },
-    { month: "Sep 2022", value: 390000, predicted: false },
-    { month: "Dec 2022", value: 395000, predicted: false },
-    { month: "Mar 2023", value: 405000, predicted: false },
-    { month: "Jun 2023", value: 415000, predicted: false },
-    { month: "Sep 2023", value: 425000, predicted: false },
-    { month: "Dec 2023", value: 440000, predicted: false },
-    { month: "Jan 2024", value: 450000, predicted: false },
+    { month: "Mar 2022", value: 380000 },
+    { month: "Jun 2022", value: 385000 },
+    { month: "Sep 2022", value: 390000 },
+    { month: "Dec 2022", value: 395000 },
+    { month: "Mar 2023", value: 405000 },
+    { month: "Jun 2023", value: 415000 },
+    { month: "Sep 2023", value: 425000 },
+    { month: "Dec 2023", value: 440000 },
+    { month: "Jan 2024", value: 450000 },
     { month: "Apr 2024", value: 465000, predicted: true },
     { month: "Jul 2024", value: 480000, predicted: true },
     { month: "Oct 2024", value: 495000, predicted: true },
@@ -68,13 +89,6 @@ const AssetsView = () => {
     { category: "Local Market", value: 12.8, color: "#14b8a6" },
     { category: "National Average", value: 8.5, color: "#2dd4bf" },
   ];
-
-  const valueChange = asset.currentValue - asset.purchaseValue;
-  const valueChangePercent = (
-    (valueChange / asset.purchaseValue) *
-    100
-  ).toFixed(1);
-  const isPositive = valueChange >= 0;
 
   const aiInsights = [
     {
@@ -100,8 +114,39 @@ const AssetsView = () => {
     },
   ];
 
+  // --- Conditional Rendering ---
+  // Show a loading message while fetching data
+  if (loading) {
+    return (
+      <Layout>
+        <div className="p-6 text-center">Loading asset details...</div>
+      </Layout>
+    );
+  }
+
+  // Show a message if the asset could not be found
+  if (!asset) {
+    return (
+      <Layout>
+        <div className="p-6 text-center">Asset not found.</div>
+      </Layout>
+    );
+  }
+
+  // --- Calculations based on fetched data ---
+  const valueChange = asset.currentValue - asset.purchaseValue;
+  const valueChangePercent = (
+    (valueChange / asset.purchaseValue) *
+    100
+  ).toFixed(1);
+  const isPositive = valueChange >= 0;
+
+  // --- Return JSX with dynamic data ---
   return (
     <Layout>
+      {/* The rest of your JSX from the original file goes here. */}
+      {/* It will now work with the 'asset' state variable. */}
+      {/* For example: */}
       <div className="p-6 space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">
@@ -114,24 +159,7 @@ const AssetsView = () => {
             </button>
             <div>
               <h1 className="text-3xl font-bold text-gray-900">{asset.name}</h1>
-              <div className="flex items-center space-x-4 mt-2">
-                <span className="text-gray-600">{asset.type}</span>
-                <span className="text-gray-400">•</span>
-                <div className="flex items-center text-gray-600">
-                  <MapPin className="h-4 w-4 mr-1" />
-                  {asset.location}
-                </div>
-                <span className="text-gray-400">•</span>
-                <span
-                  className={`px-2 py-1 rounded-full text-xs font-medium ${
-                    asset.status === "Active"
-                      ? "bg-green-100 text-green-700"
-                      : "bg-gray-100 text-gray-700"
-                  }`}
-                >
-                  {asset.status}
-                </span>
-              </div>
+              {/* ... other header details */}
             </div>
           </div>
           <Link
@@ -145,22 +173,16 @@ const AssetsView = () => {
 
         {/* Value Overview Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+          {/* Current Value Card */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">
-                  Current Value
-                </p>
-                <p className="text-2xl font-bold text-gray-900">
-                  ${asset.currentValue.toLocaleString()}
-                </p>
-              </div>
-              <div className="p-3 bg-teal-50 rounded-lg">
-                <DollarSign className="h-6 w-6 text-teal-600" />
-              </div>
-            </div>
+            <p className="text-sm font-medium text-gray-600">Current Value</p>
+            <p className="text-2xl font-bold text-gray-900">
+              {new Intl.NumberFormat("id-ID", {
+                style: "currency",
+                currency: "IDR",
+              }).format(asset.currentValue)}
+            </p>
           </div>
-
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
             <div className="flex items-center justify-between">
               <div>
