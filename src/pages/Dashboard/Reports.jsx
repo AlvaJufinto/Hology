@@ -90,16 +90,6 @@ const Reports = () => {
 		},
 	];
 
-	const reportTypes = [
-		"Semua",
-		"Kinerja",
-		"Penilaian",
-		"Pajak",
-		"Risiko",
-		"Pembaruan",
-		"Asuransi",
-	];
-
 	const periods = [
 		"Semua",
 		"Triwulan IV 2023",
@@ -202,7 +192,7 @@ const Reports = () => {
 							onChange={(e) => setSelectedType(e.target.value)}
 							className="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
 						>
-							{reportTypes.map((type) => (
+							{REPORT_TYPE.map((type) => (
 								<option key={type} value={type}>
 									{type}
 								</option>
