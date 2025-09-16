@@ -2,17 +2,22 @@
 
 import { useState } from "react";
 
-import { REPORT_TYPE } from "../../utils"; // Import enum untuk jenis laporan
+import { Loader } from "lucide-react"; // Import Lucide Loader
+
+import { auth } from "../../dev/firebase";
+import { generateReport } from "../../services/reports";
+import { REPORT_TYPE } from "../../utils"; // Import enum for report types
 
 export default function NewReportButton() {
-	const [modalOpen, setModalOpen] = useState(false); // State modal
+	const [modalOpen, setModalOpen] = useState(false); // Modal state
 	const [newReport, setNewReport] = useState({
 		name: "",
-		type: "semua", // default to 'semua'
+		type: "semua",
 		note: "",
 	});
+	const [loading, setLoading] = useState(false); // Loading state for button
+	const uid = auth.currentUser.uid;
 
-	// Fungsi untuk menangani perubahan input
 	const handleChange = (e) => {
 		const { name, value } = e.target;
 		setNewReport((prevReport) => ({
@@ -21,42 +26,45 @@ export default function NewReportButton() {
 		}));
 	};
 
-	// Fungsi untuk menangani pengiriman form
-	const handleSubmit = (e) => {
+	const handleSubmit = async (e) => {
 		e.preventDefault();
-		// Simulasi pembuatan laporan baru
-		console.log("Membuat laporan baru: ", newReport);
-		setModalOpen(false); // Tutup modal setelah laporan disimpan
+		await generateReport(uid, {
+			type: newReport.type,
+			note: newReport.note,
+			setLoading, // Pass setLoading to backend function
+		});
+		setModalOpen(false); // Close the modal after report is created
 	};
 
-	// Fungsi untuk menangani klik di luar modal agar tidak menutup modal
 	const handleModalClick = (e) => {
-		e.stopPropagation(); // Mencegah penutupan modal ketika klik dalam modal
+		e.stopPropagation(); // Prevent modal close when clicking inside
 	};
 
 	return (
 		<div>
-			{/* Tombol untuk membuka modal */}
 			<button
-				onClick={() => setModalOpen(true)} // Membuka modal
+				onClick={() => setModalOpen(true)} // Open modal
 				className="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors"
+				disabled={loading} // Disable the button when loading
 			>
-				Buat Laporan Baru
+				{loading ? (
+					<Loader className="animate-spin" size={24} />
+				) : (
+					"Buat Laporan Baru"
+				)}
 			</button>
 
-			{/* Modal untuk input laporan baru */}
 			{modalOpen && (
 				<div
-					onClick={() => setModalOpen(false)} // Menutup modal saat klik di luar
+					onClick={() => setModalOpen(false)}
 					className="fixed inset-0 bg-[rgba(0,0,0,0.3)] flex justify-center items-center z-50 transition-all duration-300 ease-in-out"
 				>
 					<div
-						onClick={handleModalClick} // Mencegah modal tertutup saat klik di dalam
+						onClick={handleModalClick}
 						className="bg-white p-6 rounded-lg w-1/3 transform transition-all duration-300 ease-in-out opacity-100 scale-100"
 					>
 						<h2 className="text-2xl font-semibold mb-4">Buat Laporan Baru</h2>
 						<form onSubmit={handleSubmit} className="space-y-4">
-							{/* Input Nama Laporan */}
 							<div>
 								<label
 									htmlFor="name"
@@ -76,7 +84,6 @@ export default function NewReportButton() {
 								/>
 							</div>
 
-							{/* Dropdown Jenis Laporan */}
 							<div>
 								<label
 									htmlFor="type"
@@ -100,7 +107,6 @@ export default function NewReportButton() {
 								</select>
 							</div>
 
-							{/* Input Catatan (Opsional) */}
 							<div>
 								<label
 									htmlFor="note"
@@ -118,20 +124,24 @@ export default function NewReportButton() {
 								></textarea>
 							</div>
 
-							{/* Tombol Batal dan Simpan */}
 							<div className="flex justify-end space-x-4 mt-4">
 								<button
 									type="button"
-									onClick={() => setModalOpen(false)} // Menutup modal
-									className="px-4 py-2 bg-gray-300 text-gray-800 rounded-lg"
+									onClick={() => setModalOpen(false)} // Close modal
+									className="cursor-pointer px-4 py-2 bg-gray-300 text-gray-800 rounded-lg"
 								>
-									Batal
+									Tutup
 								</button>
 								<button
 									type="submit"
-									className="px-4 py-2 bg-teal-600 text-white rounded-lg"
+									className="cursor-pointer px-4 py-2 bg-teal-600 text-white rounded-lg"
+									disabled={loading} // Disable the button while loading
 								>
-									Simpan Laporan
+									{loading ? (
+										<Loader className="animate-spin" size={24} />
+									) : (
+										"Simpan Laporan"
+									)}
 								</button>
 							</div>
 						</form>

@@ -1,92 +1,124 @@
 /** @format */
 
 import {
-  addDoc,
-  collection,
-  deleteDoc,
-  doc,
-  getDoc,
-  onSnapshot,
-  orderBy,
-  query,
-  serverTimestamp,
-  updateDoc,
-  where,
+	addDoc,
+	collection,
+	deleteDoc,
+	doc,
+	getDoc,
+	getDocs,
+	onSnapshot,
+	orderBy,
+	query,
+	serverTimestamp,
+	updateDoc,
+	where,
 } from "firebase/firestore";
 
 import { db } from "../dev/firebase";
 
-// CREATE (Your version is perfect)
+// CREATE
 export async function addAsset(userUid, data) {
-  const coll = collection(db, "assets");
-  const payload = {
-    ...data,
-    ownerUid: userUid,
-    createdAt: serverTimestamp(),
-    updatedAt: serverTimestamp(),
-  };
-  // Note: Your schema screenshot didn't have lastUpdated, so I'm removing it
-  // to match the schema. We'll use updatedAt instead.
-  const ref = await addDoc(coll, payload);
-  return ref.id;
+	const coll = collection(db, "assets");
+	const payload = {
+		...data,
+		ownerUid: userUid,
+		createdAt: serverTimestamp(),
+		updatedAt: serverTimestamp(),
+	};
+	const ref = await addDoc(coll, payload);
+	return ref.id;
 }
 
-// READ (subscribe realtime) (Your version is perfect)
+// READ (subscribe realtime)
 export function subscribeAssets(userUid, cb) {
-  const q = query(
-    collection(db, "assets"),
-    where("ownerUid", "==", userUid),
-    orderBy("updatedAt", "desc")
-  );
-  return onSnapshot(q, (snap) => {
-    const items = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
-    cb(items);
-  });
+	console.log("🚀 ~ subscribeAssets ~ userUid:", userUid);
+	const q = query(
+		collection(db, "assets"),
+		where("ownerUid", "==", userUid),
+		orderBy("updatedAt", "desc")
+	);
+	return onSnapshot(q, (snap) => {
+		const items = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+		cb(items);
+	});
 }
 
-// READ (single) -- CORRECTED with security check
+// READ (single asset) with error handling
 export async function getAsset(userUid, assetId) {
-  const ref = doc(db, "assets", assetId);
-  const snap = await getDoc(ref);
+	try {
+		const ref = doc(db, "assets", assetId);
+		const snap = await getDoc(ref);
 
-  // SECURITY: Only return the document if it exists AND the ownerUid matches.
-  if (snap.exists() && snap.data().ownerUid === userUid) {
-    return { id: snap.id, ...snap.data() };
-  }
-  return null;
+		if (snap.exists() && snap.data().ownerUid === userUid) {
+			return { id: snap.id, ...snap.data() };
+		}
+		return null;
+	} catch (error) {
+		console.error("Error getting asset:", error);
+		throw new Error("Failed to fetch asset");
+	}
 }
 
-// UPDATE (partial) -- CORRECTED with security check
+// UPDATED: READ multiple assets with Firebase v9+
+export async function getAssets(userUid) {
+	if (!userUid) {
+		console.error("Invalid userUid.");
+		return [];
+	}
+
+	try {
+		// Query to get assets owned by the user
+		const q = query(collection(db, "assets"), where("ownerUid", "==", userUid));
+		const querySnapshot = await getDocs(q); // Using getDocs instead of collection().get()
+
+		// Map over the snapshot to return the asset data
+		return querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+	} catch (error) {
+		console.error("Error getting assets:", error);
+		return [];
+	}
+}
+
+// UPDATE (partial) with error handling
 export async function updateAsset(userUid, assetId, patch) {
-  const ref = doc(db, "assets", assetId);
-
-  // SECURITY: First, fetch the document to verify ownership.
-  const docSnap = await getDoc(ref);
-  if (!docSnap.exists() || docSnap.data().ownerUid !== userUid) {
-    throw new Error("Permission denied or document not found.");
-  }
-
-  // If the check passes, proceed with the update.
-  await updateDoc(ref, { ...patch, updatedAt: serverTimestamp() });
+	try {
+		const ref = doc(db, "assets", assetId);
+		const docSnap = await getDoc(ref);
+		if (!docSnap.exists() || docSnap.data().ownerUid !== userUid) {
+			throw new Error("Permission denied or document not found.");
+		}
+		await updateDoc(ref, { ...patch, updatedAt: serverTimestamp() });
+	} catch (error) {
+		console.error("Error updating asset:", error);
+		throw new Error("Failed to update asset");
+	}
 }
 
-// DELETE -- CORRECTED with security check
+// DELETE with error handling
 export async function removeAsset(userUid, assetId) {
-  const ref = doc(db, "assets", assetId);
-
-  // SECURITY: First, fetch the document to verify ownership.
-  const docSnap = await getDoc(ref);
-  if (!docSnap.exists() || docSnap.data().ownerUid !== userUid) {
-    throw new Error("Permission denied or document not found.");
-  }
-
-  // If the check passes, proceed with the deletion.
-  await deleteDoc(ref);
+	try {
+		const ref = doc(db, "assets", assetId);
+		const docSnap = await getDoc(ref);
+		if (!docSnap.exists() || docSnap.data().ownerUid !== userUid) {
+			throw new Error("Permission denied or document not found.");
+		}
+		await deleteDoc(ref);
+	} catch (error) {
+		console.error("Error removing asset:", error);
+		throw new Error("Failed to remove asset");
+	}
 }
 
+// Get Historical Data with error handling
 export async function getHistoricalData(assetId) {
-  const coll = collection(db, "assets", assetId, "historicalData");
-  const q = query(coll, orderBy("date", "asc"));
-  const snap = await getDocs(q);
-  return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+	try {
+		const coll = collection(db, "assets", assetId, "historicalData");
+		const q = query(coll, orderBy("date", "asc"));
+		const snap = await getDoc(q);
+		return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+	} catch (error) {
+		console.error("Error getting historical data:", error);
+		throw new Error("Failed to fetch historical data");
+	}
 }
