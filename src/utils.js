@@ -25,6 +25,8 @@ export const formatIDR = (value) => {
 
 export const telHref = (phone) => `tel:${phone.replace(/\s+/g, "")}`;
 
+// ASSET UTILS
+
 export const ASSET_TYPE = {
 	land: { key: "land", label: "Tanah", iconKey: "land" },
 	house: { key: "house", label: "Rumah", iconKey: "home" },
@@ -70,6 +72,8 @@ export const ICONS = {
 	other: Building2,
 };
 
+// END ASSET UTILS
+
 // fallback ikon kalau field iconKey kosong → bisa pilih default berdasar tipe
 export function pickIcon(iconKey, fallback = "other") {
 	return ICONS[iconKey] || ICONS[fallback] || ICONS.other;
@@ -93,3 +97,20 @@ export function getLabel(mapObj, key) {
 export const ASSET_TYPE_OPTIONS = toOptions(ASSET_TYPE);
 export const ASSET_PURPOSE_OPTIONS = toOptions(ASSET_PURPOSE);
 export const ASSET_STATUS_OPTIONS = toOptions(ASSET_STATUS);
+
+export const formatIndoDate = (iso) =>
+	new Date(iso).toLocaleDateString("id-ID", {
+		day: "2-digit",
+		month: "long",
+		year: "numeric",
+	});
+
+export const REPORT_TYPE = {
+	semua: { key: "semua", label: "Semua", iconKey: "folder" },
+	kinerja: { key: "kinerja", label: "Kinerja", iconKey: "bar-chart" },
+	penilaian: { key: "penilaian", label: "Penilaian", iconKey: "clipboard" },
+	pajak: { key: "pajak", label: "Pajak", iconKey: "calculator" },
+	risiko: { key: "risiko", label: "Risiko", iconKey: "shield" },
+	pembaruan: { key: "pembaruan", label: "Pembaruan", iconKey: "refresh-ccw" },
+	asuransi: { key: "asuransi", label: "Asuransi", iconKey: "umbrella" },
+};

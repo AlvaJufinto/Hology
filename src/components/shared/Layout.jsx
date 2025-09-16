@@ -12,7 +12,6 @@ import {
 	LogOut,
 	Menu,
 	Settings,
-	User,
 	Users,
 	X,
 } from "lucide-react";
@@ -22,7 +21,7 @@ import Logo from "../../assets/logo/logo-3.svg";
 import { useAuth } from "../../context/AuthContext";
 
 const Layout = ({ children }) => {
-	const { user } = useAuth();
+	const { user, logout } = useAuth();
 	console.log("🚀 ~ Layout ~ user:", user);
 	const [sidebarOpen, setSidebarOpen] = useState(false);
 	const location = useLocation();
@@ -38,6 +37,7 @@ const Layout = ({ children }) => {
 
 	const handleLogout = () => {
 		// Handle logout logic here
+		logout();
 		navigate("/login");
 	};
 
@@ -50,7 +50,7 @@ const Layout = ({ children }) => {
 				} transition-transform duration-300 ease-in-out lg:translate-x-0`}
 			>
 				<div className="flex items-center justify-between h-24 px-6 border-b border-gray-200">
-					<img src={Logo} className="w-40" alt="logo" />
+					<img src={Logo} className="w-40" alt="Logo" />
 					<button
 						onClick={() => setSidebarOpen(false)}
 						className="lg:hidden p-2 rounded-md text-gray-400 hover:text-gray-600"
@@ -86,15 +86,16 @@ const Layout = ({ children }) => {
 
 				<div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200">
 					<div className="flex items-center space-x-3 mb-4">
-						<div className="w-8 h-8 bg-teal-100 rounded-full flex items-center justify-center">
-							<User className="h-4 w-4 text-teal-600" />
-							<img src={user.photoURL} className="rounded-full" alt="photo" />
-						</div>
+						<img
+							src={user.photoURL}
+							className="rounded-full object-cover w-8"
+							alt="photo"
+						/>
 						<div>
 							<p className="text-sm font-medium text-gray-900">
 								{user.displayName}
 							</p>
-							<p className="text-xs text-gray-500">{user.email}</p>
+							<p className="text-xs text-gray-500 truncate">{user.email}</p>
 						</div>
 					</div>
 					<div className="flex space-x-2">

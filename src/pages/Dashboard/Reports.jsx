@@ -1,111 +1,111 @@
 /** @format */
 
-"use client";
-
 import { useState } from "react";
 
 import {
 	Activity,
-	Calendar,
 	DollarSign,
-	Download,
-	Eye,
 	FileText,
 	Search,
 	TrendingUp,
 } from "lucide-react";
 
+import BannerAI from "../../components/Reports/BannerAI";
+import NewReportButton from "../../components/Reports/NewReportButton";
+import ReportCard from "../../components/Reports/ReportCard";
 import Layout from "../../components/shared/Layout";
+import { REPORT_TYPE } from "../../utils";
 
 const Reports = () => {
-	const [selectedType, setSelectedType] = useState("All");
-	const [selectedPeriod, setSelectedPeriod] = useState("All");
+	const [selectedType, setSelectedType] = useState("Semua");
+	const [selectedPeriod, setSelectedPeriod] = useState("Semua");
 	const [searchTerm, setSearchTerm] = useState("");
 
 	const reports = [
 		{
 			id: 1,
-			title: "Portfolio Performance Report",
-			type: "Performance",
-			period: "Q4 2023",
+			title: "Laporan Kinerja Portofolio",
+			type: "Kinerja",
+			period: "Triwulan IV 2023",
 			generatedDate: "2024-01-15",
-			status: "Ready",
-			size: "2.4 MB",
+			status: "Siap",
+			size: "2,4 MB",
 			description:
-				"Comprehensive analysis of portfolio performance including ROI, market comparison, and growth trends.",
+				"Analisis komprehensif kinerja portofolio: ROI, perbandingan dengan pasar, dan tren pertumbuhan.",
 		},
 		{
 			id: 2,
-			title: "Asset Valuation Summary",
-			type: "Valuation",
-			period: "December 2023",
+			title: "Ringkasan Penilaian Aset",
+			type: "Penilaian",
+			period: "Desember 2023",
 			generatedDate: "2024-01-10",
-			status: "Ready",
-			size: "1.8 MB",
+			status: "Siap",
+			size: "1,8 MB",
 			description:
-				"Current market valuations for all assets with AI-powered forecasting and risk assessment.",
+				"Nilai pasar terbaru untuk seluruh aset dilengkapi proyeksi dan penilaian risiko berbasis AI.",
 		},
 		{
 			id: 3,
-			title: "Tax Preparation Report",
-			type: "Tax",
-			period: "2023",
+			title: "Laporan Persiapan Pajak",
+			type: "Pajak",
+			period: "Tahun Buku 2023",
 			generatedDate: "2024-01-08",
-			status: "Ready",
-			size: "3.2 MB",
+			status: "Siap",
+			size: "3,2 MB",
 			description:
-				"Complete tax documentation including capital gains, depreciation, and deductible expenses.",
+				"Dokumentasi pajak: capital gain, depresiasi, dan biaya yang dapat dikurangkan.",
 		},
 		{
 			id: 4,
-			title: "Risk Analysis Report",
-			type: "Risk",
-			period: "Q4 2023",
+			title: "Analisis Risiko Portofolio",
+			type: "Risiko",
+			period: "Triwulan IV 2023",
 			generatedDate: "2024-01-05",
-			status: "Ready",
-			size: "1.5 MB",
+			status: "Siap",
+			size: "1,5 MB",
 			description:
-				"Market risk assessment and portfolio diversification analysis with recommendations.",
+				"Penilaian risiko pasar dan diversifikasi portofolio disertai rekomendasi.",
 		},
 		{
 			id: 5,
-			title: "Monthly Asset Update",
-			type: "Update",
-			period: "January 2024",
+			title: "Pembaruan Aset Bulanan",
+			type: "Pembaruan",
+			period: "Januari 2024",
 			generatedDate: "2024-01-03",
-			status: "Processing",
+			status: "Diproses",
 			size: "-",
 			description:
-				"Monthly summary of asset value changes, market trends, and AI insights.",
+				"Ringkasan perubahan nilai aset, tren pasar, dan insight AI bulanan.",
 		},
 		{
 			id: 6,
-			title: "Insurance Coverage Review",
-			type: "Insurance",
+			title: "Tinjauan Cakupan Asuransi",
+			type: "Asuransi",
 			period: "2024",
 			generatedDate: "2024-01-01",
-			status: "Ready",
-			size: "2.1 MB",
+			status: "Siap",
+			size: "2,1 MB",
 			description:
-				"Analysis of current insurance coverage adequacy and recommendations for optimization.",
+				"Analisis kecukupan perlindungan asuransi dan rekomendasi optimalisasi.",
 		},
 	];
 
 	const reportTypes = [
-		"All",
-		"Performance",
-		"Valuation",
-		"Tax",
-		"Risk",
-		"Update",
-		"Insurance",
+		"Semua",
+		"Kinerja",
+		"Penilaian",
+		"Pajak",
+		"Risiko",
+		"Pembaruan",
+		"Asuransi",
 	];
+
 	const periods = [
-		"All",
-		"Q4 2023",
-		"December 2023",
-		"2023",
-		"January 2024",
+		"Semua",
+		"Triwulan IV 2023",
+		"Desember 2023",
+		"Tahun Buku 2023",
+		"Januari 2024",
 		"2024",
 	];
 
@@ -113,16 +113,17 @@ const Reports = () => {
 		const matchesSearch =
 			report.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
 			report.description.toLowerCase().includes(searchTerm.toLowerCase());
-		const matchesType = selectedType === "All" || report.type === selectedType;
+		const matchesType =
+			selectedType === "Semua" || report.type === selectedType;
 		const matchesPeriod =
-			selectedPeriod === "All" || report.period === selectedPeriod;
+			selectedPeriod === "Semua" || report.period === selectedPeriod;
 
 		return matchesSearch && matchesType && matchesPeriod;
 	});
 
 	const generateReport = (type) => {
-		// Simulate report generation
-		console.log(`Generating ${type} report...`);
+		// Simulasi pembuatan laporan
+		console.log(`Membuat laporan ${type}...`);
 	};
 
 	return (
@@ -132,103 +133,70 @@ const Reports = () => {
 				<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
 					<div>
 						<h1 className="text-3xl font-bold text-gray-900">
-							AI Report Generation
+							Pembuatan Laporan AI
 						</h1>
 						<p className="mt-2 text-gray-600">
-							Generate and manage automated asset reports
+							Buat dan kelola laporan aset secara otomatis
 						</p>
 					</div>
 					<div className="mt-4 sm:mt-0 flex space-x-3">
-						<button
-							onClick={() => generateReport("Custom")}
-							className="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors"
-						>
-							Generate New Report
-						</button>
+						<NewReportButton />
 					</div>
 				</div>
 
-				{/* Quick Generate Cards */}
+				{/* Kartu Quick Generate */}
 				<div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-					<div
-						onClick={() => generateReport("Performance")}
-						className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer"
-					>
-						<div className="flex items-center space-x-4">
-							<div className="p-3 bg-teal-50 rounded-lg">
-								<TrendingUp className="h-6 w-6 text-teal-600" />
-							</div>
-							<div>
-								<h3 className="font-semibold text-gray-900">Performance</h3>
-								<p className="text-sm text-gray-600">Portfolio analysis</p>
-							</div>
-						</div>
-					</div>
-
-					<div
-						onClick={() => generateReport("Valuation")}
-						className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer"
-					>
-						<div className="flex items-center space-x-4">
-							<div className="p-3 bg-blue-50 rounded-lg">
-								<DollarSign className="h-6 w-6 text-blue-600" />
-							</div>
-							<div>
-								<h3 className="font-semibold text-gray-900">Valuation</h3>
-								<p className="text-sm text-gray-600">Current values</p>
-							</div>
-						</div>
-					</div>
-
-					<div
-						onClick={() => generateReport("Tax")}
-						className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer"
-					>
-						<div className="flex items-center space-x-4">
-							<div className="p-3 bg-green-50 rounded-lg">
-								<FileText className="h-6 w-6 text-green-600" />
-							</div>
-							<div>
-								<h3 className="font-semibold text-gray-900">Tax Report</h3>
-								<p className="text-sm text-gray-600">Tax documentation</p>
+					{Object.entries(REPORT_TYPE).map(([key, { label, iconKey }]) => (
+						<div
+							key={key}
+							onClick={() => generateReport(label)}
+							className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer"
+						>
+							<div className="flex items-center space-x-4">
+								<div className="p-3 bg-teal-50 rounded-lg">
+									{iconKey === "bar-chart" && (
+										<TrendingUp className="h-6 w-6 text-teal-600" />
+									)}
+									{iconKey === "clipboard" && (
+										<FileText className="h-6 w-6 text-blue-600" />
+									)}
+									{iconKey === "calculator" && (
+										<DollarSign className="h-6 w-6 text-green-600" />
+									)}
+									{iconKey === "shield" && (
+										<Activity className="h-6 w-6 text-purple-600" />
+									)}
+									{/* Add other icons for remaining types */}
+								</div>
+								<div>
+									<h3 className="font-semibold text-gray-900">{label}</h3>
+									<p className="text-sm text-gray-600">
+										Analisis {label.toLowerCase()}
+									</p>
+								</div>
 							</div>
 						</div>
-					</div>
-
-					<div
-						onClick={() => generateReport("Risk")}
-						className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer"
-					>
-						<div className="flex items-center space-x-4">
-							<div className="p-3 bg-purple-50 rounded-lg">
-								<Activity className="h-6 w-6 text-purple-600" />
-							</div>
-							<div>
-								<h3 className="font-semibold text-gray-900">Risk Analysis</h3>
-								<p className="text-sm text-gray-600">Risk assessment</p>
-							</div>
-						</div>
-					</div>
+					))}
 				</div>
 
-				{/* Search and Filters */}
+				{/* Pencarian & Filter */}
 				<div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
 					<div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-						{/* Search */}
+						{/* Pencarian */}
 						<div className="relative">
 							<div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
 								<Search className="h-5 w-5 text-gray-400" />
 							</div>
 							<input
 								type="text"
-								placeholder="Search reports..."
+								placeholder="Cari laporan…"
 								value={searchTerm}
 								onChange={(e) => setSearchTerm(e.target.value)}
 								className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
 							/>
 						</div>
 
-						{/* Type Filter */}
+						{/* Filter Jenis */}
 						<select
 							value={selectedType}
 							onChange={(e) => setSelectedType(e.target.value)}
@@ -241,7 +209,7 @@ const Reports = () => {
 							))}
 						</select>
 
-						{/* Period Filter */}
+						{/* Filter Periode */}
 						<select
 							value={selectedPeriod}
 							onChange={(e) => setSelectedPeriod(e.target.value)}
@@ -256,127 +224,38 @@ const Reports = () => {
 					</div>
 				</div>
 
-				{/* Reports List */}
+				{/* Daftar Laporan */}
 				<div className="bg-white rounded-xl shadow-sm border border-gray-200">
 					<div className="p-6 border-b border-gray-200">
 						<h2 className="text-lg font-semibold text-gray-900">
-							Generated Reports
+							Laporan Tergenerasi
 						</h2>
 						<p className="text-sm text-gray-600 mt-1">
-							Showing {filteredReports.length} of {reports.length} reports
+							Menampilkan {filteredReports.length} dari {reports.length} laporan
 						</p>
 					</div>
 
 					<div className="divide-y divide-gray-200">
 						{filteredReports.map((report) => (
-							<div
-								key={report.id}
-								className="p-6 hover:bg-gray-50 transition-colors"
-							>
-								<div className="flex items-start justify-between">
-									<div className="flex-1">
-										<div className="flex items-center space-x-3 mb-2">
-											<h3 className="text-lg font-medium text-gray-900">
-												{report.title}
-											</h3>
-											<span
-												className={`px-2 py-1 rounded-full text-xs font-medium ${
-													report.status === "Ready"
-														? "bg-green-100 text-green-700"
-														: "bg-yellow-100 text-yellow-700"
-												}`}
-											>
-												{report.status}
-											</span>
-										</div>
-
-										<p className="text-gray-600 mb-3">{report.description}</p>
-
-										<div className="flex items-center space-x-6 text-sm text-gray-500">
-											<div className="flex items-center">
-												<FileText className="h-4 w-4 mr-1" />
-												{report.type}
-											</div>
-											<div className="flex items-center">
-												<Calendar className="h-4 w-4 mr-1" />
-												{report.period}
-											</div>
-											<div>
-												Generated:{" "}
-												{new Date(report.generatedDate).toLocaleDateString()}
-											</div>
-											{report.size !== "-" && <div>Size: {report.size}</div>}
-										</div>
-									</div>
-
-									<div className="flex items-center space-x-2 ml-4">
-										{report.status === "Ready" && (
-											<>
-												<button className="flex items-center px-3 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors">
-													<Eye className="h-4 w-4 mr-2" />
-													View
-												</button>
-												<button className="flex items-center px-3 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors">
-													<Download className="h-4 w-4 mr-2" />
-													Download
-												</button>
-											</>
-										)}
-										{report.status === "Processing" && (
-											<div className="flex items-center px-3 py-2 text-yellow-600">
-												<div className="animate-spin rounded-full h-4 w-4 border-b-2 border-yellow-600 mr-2"></div>
-												Processing...
-											</div>
-										)}
-									</div>
-								</div>
-							</div>
+							<ReportCard key={report.id} report={report} />
 						))}
 					</div>
 				</div>
 
-				{/* No Results */}
+				{/* Tidak Ada Hasil */}
 				{filteredReports.length === 0 && (
 					<div className="text-center py-12">
 						<FileText className="h-12 w-12 text-gray-400 mx-auto mb-4" />
 						<h3 className="text-lg font-medium text-gray-900 mb-2">
-							No reports found
+							Laporan tidak ditemukan
 						</h3>
 						<p className="text-gray-600">
-							Try adjusting your search criteria or generate a new report
+							Coba ubah kriteria pencarian atau buat laporan baru
 						</p>
 					</div>
 				)}
 
-				{/* AI Report Generation Info */}
-				<div className="bg-gradient-to-r from-teal-50 to-blue-50 rounded-xl border border-teal-200 p-6">
-					<div className="flex items-start space-x-4">
-						<div className="p-3 bg-teal-100 rounded-lg">
-							<Activity className="h-6 w-6 text-teal-600" />
-						</div>
-						<div className="flex-1">
-							<h3 className="text-lg font-semibold text-gray-900 mb-2">
-								AI-Powered Report Generation
-							</h3>
-							<p className="text-gray-700 mb-3">
-								Our AI automatically analyzes your portfolio data to generate
-								comprehensive reports with:
-							</p>
-							<div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-600">
-								<ul className="space-y-1">
-									<li>• Market trend analysis</li>
-									<li>• Performance benchmarking</li>
-									<li>• Risk assessment</li>
-								</ul>
-								<ul className="space-y-1">
-									<li>• Tax optimization insights</li>
-									<li>• Future value projections</li>
-									<li>• Actionable recommendations</li>
-								</ul>
-							</div>
-						</div>
-					</div>
-				</div>
+				<BannerAI />
 			</div>
 		</Layout>
 	);
