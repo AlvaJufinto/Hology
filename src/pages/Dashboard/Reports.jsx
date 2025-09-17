@@ -10,7 +10,7 @@ import ReportCard from "../../components/Reports/ReportCard";
 import Layout from "../../components/shared/Layout";
 import { auth } from "../../dev/firebase";
 import { subscribeReports } from "../../services/reports"; // Import the subscribe function
-import { getLabel, pickIcon, REPORT_TYPE } from "../../utils";
+import { pickIcon, REPORT_TYPE } from "../../utils";
 
 const Reports = () => {
 	const [searchTerm, setSearchTerm] = useState("");
@@ -60,14 +60,7 @@ const Reports = () => {
 			}
 
 			return {
-				id: r.id,
-				title: r.title,
-				type: getLabel(REPORT_TYPE, r.type),
-				status: getLabel(REPORT_TYPE, r.status),
-				period: r.period || "-",
-				generatedDate: lastUpdatedStr || "-",
-				icon: Icon,
-				description: r.description || "-",
+				...r,
 			};
 		});
 	}, [rawReports]);
@@ -93,8 +86,6 @@ const Reports = () => {
 
 		return matchesSearch && matchesType && matchesPeriod;
 	});
-	console.log("🚀 ~ Reports ~ filteredReports:", filteredReports);
-
 	return (
 		<Layout>
 			<div className="p-6 space-y-6">

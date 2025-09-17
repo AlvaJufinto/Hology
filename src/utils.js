@@ -115,3 +115,11 @@ export const REPORT_TYPE = {
 	asuransi: { key: "asuransi", label: "Asuransi", iconKey: "umbrella" },
 };
 
+export function estimateHtmlSizeMB(html, decimals = 2) {
+	if (typeof html !== "string") {
+		throw new TypeError("Input harus string HTML.");
+	}
+	const bytes = new TextEncoder().encode(html).length;
+	const MB = 1024 * 1024;
+	return Number((bytes / MB).toFixed(decimals));
+}

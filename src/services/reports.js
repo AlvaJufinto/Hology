@@ -37,7 +37,7 @@ export async function generateReport(userUid, setLoading, documentDetail) {
 			model: "gemini-1.5-flash",
 			config: {
 				candidateCount: 1,
-				maxOutputTokens: 2500,
+				maxOutputTokens: 3000,
 				temperature: 1.0,
 			},
 		});
@@ -70,7 +70,6 @@ export async function generateReport(userUid, setLoading, documentDetail) {
 				content,
 				description,
 				ownerUid: userUid,
-				generatedDate: serverTimestamp(),
 				createdAt: serverTimestamp(),
 			};
 
