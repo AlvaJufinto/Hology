@@ -12,8 +12,9 @@ export default function Visons() {
 					Berhargamu di <span className="text-teal-500">Pintar Menjaga</span>
 				</h1>
 				<p className="text-gray-600 text-base md:text-lg max-w-2xl mb-12">
-					Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aset Anda
-					tetap aman sekaligus bertumbuh bersama teknologi yang cerdas.
+					Platform ini menghadirkan solusi inovatif untuk manajemen aset modern,
+					mulai dari valuasi berbasis AI hingga pembuatan laporan otomatis yang
+					siap pakai.
 				</p>
 
 				{/* Cards */}

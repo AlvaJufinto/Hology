@@ -16,7 +16,7 @@ import Logo from "../../assets/logo/logo-2.svg";
 
 const Footer = () => {
 	return (
-		<footer className="bg-[url('./assets/bg/bg-2.png')] bg-cover bg-no-repeat bg-center	">
+		<footer className="bg-[#F9FFE5] bg-cover bg-no-repeat bg-center	">
 			<div className="max-w-screen-2xl mx-auto px-4 md:px-6 py-14">
 				<div className="bg-white/90 backdrop-blur-lg rounded-2xl shadow-lg p-8 md:p-10">
 					{/* Grid utama */}

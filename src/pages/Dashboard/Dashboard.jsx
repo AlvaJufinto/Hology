@@ -95,7 +95,7 @@ const Dashboard = () => {
 								<p className="text-sm font-medium text-gray-600">
 									Total Portfolio Value
 								</p>
-								<p className="text-2xl font-bold text-gray-900">$735,000</p>
+								<p className="text-2xl font-bold text-gray-900">Rp735,000</p>
 								<p className="text-sm text-green-600 flex items-center mt-1">
 									<ArrowUp className="h-4 w-4 mr-1" />
 									+12.5% from last month
@@ -258,7 +258,10 @@ const Dashboard = () => {
 									))}
 								</Pie>
 								<Tooltip
-									formatter={(value) => [`$${value.toLocaleString()}`, "Value"]}
+									formatter={(value) => [
+										`Rp${value.toLocaleString()}`,
+										"Value",
+									]}
 									contentStyle={{
 										backgroundColor: "white",
 										border: "1px solid #e5e7eb",
