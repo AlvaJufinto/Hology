@@ -80,11 +80,11 @@ export function pickIcon(iconKey, fallback = "other") {
 }
 
 export function getTrend(currentValue, purchaseValue) {
-	if (typeof currentValue !== "number" || typeof purchaseValue !== "number")
-		return "flat";
+	// if (typeof currentValue !== "number" || typeof purchaseValue !== "number")
+	// 	return "flat";
 	if (currentValue > purchaseValue) return "up";
 	if (currentValue < purchaseValue) return "down";
-	return "flat";
+	// return "flat";
 }
 
 // ===== Helper umum

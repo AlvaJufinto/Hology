@@ -69,7 +69,6 @@ const AssetsEdit = () => {
                 }
               }
 
-
               const documents = assetData.documents || [];
 
               setFormData({ ...assetData, purchaseDate, documents });
@@ -128,6 +127,8 @@ const AssetsEdit = () => {
     try {
       formData.trend = getTrend(formData.currentValue, formData.purchaseValue);
       console.log(formData.currentValue, formData.purchaseValue);
+      console.log(formData.trend);
+
       console.log(formData);
 
       // Separate existing document URLs from new File objects
