@@ -114,3 +114,4 @@ export const REPORT_TYPE = {
 	pembaruan: { key: "pembaruan", label: "Pembaruan", iconKey: "refresh-ccw" },
 	asuransi: { key: "asuransi", label: "Asuransi", iconKey: "umbrella" },
 };
+

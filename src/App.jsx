@@ -16,6 +16,7 @@ import NotaryFinder from "./pages/Dashboard/NotaryFinder";
 import Reports from "./pages/Dashboard/Reports";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
+import ReportsCreate from "./pages/Dashboard/ReportsCreate";
 
 function App() {
   return (
@@ -84,6 +85,14 @@ function App() {
           element={
             <PrivateRoute>
               <Reports />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/reports/create"
+          element={
+            <PrivateRoute>
+              <ReportsCreate />
             </PrivateRoute>
           }
         />
