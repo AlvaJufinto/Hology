@@ -56,9 +56,19 @@ const AssetsEdit = () => {
             const assetData = await getAsset(user.uid, id);
             if (assetData) {
               // Format date for the input field (Firebase timestamp -> YYYY-MM-DD)
-              const purchaseDate = assetData.purchaseDate?.toDate
-                ? assetData.purchaseDate.toDate().toISOString().split("T")[0]
-                : "";
+              let purchaseDate = "";
+              if (assetData.purchaseDate) {
+                if (typeof assetData.purchaseDate.toDate === "function") {
+                  // Firestore Timestamp
+                  purchaseDate = assetData.purchaseDate
+                    .toDate()
+                    .toISOString()
+                    .split("T")[0];
+                } else {
+                  purchaseDate = assetData.purchaseDate;
+                }
+              }
+
 
               const documents = assetData.documents || [];
 
@@ -116,10 +126,10 @@ const AssetsEdit = () => {
     setSaving(true);
 
     try {
-      formData.trend = getTrend(formData.currentValue, formData.purchaseValue)
-      console.log(formData.currentValue, formData.purchaseValue)
-      console.log(formData)
-      
+      formData.trend = getTrend(formData.currentValue, formData.purchaseValue);
+      console.log(formData.currentValue, formData.purchaseValue);
+      console.log(formData);
+
       // Separate existing document URLs from new File objects
       const existingDocs = formData.documents.filter(
         (doc) => typeof doc === "string"
