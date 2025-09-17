@@ -22,7 +22,6 @@ import { useAuth } from "../../context/AuthContext";
 
 const Layout = ({ children }) => {
 	const { user, logout } = useAuth();
-	console.log("🚀 ~ Layout ~ user:", user);
 	const [sidebarOpen, setSidebarOpen] = useState(false);
 	const location = useLocation();
 	const navigate = useNavigate();

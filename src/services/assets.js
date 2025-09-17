@@ -32,7 +32,6 @@ export async function addAsset(userUid, data) {
 
 // READ (subscribe realtime)
 export function subscribeAssets(userUid, cb) {
-	console.log("🚀 ~ subscribeAssets ~ userUid:", userUid);
 	const q = query(
 		collection(db, "assets"),
 		where("ownerUid", "==", userUid),

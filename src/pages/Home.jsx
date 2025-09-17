@@ -10,13 +10,19 @@ import AboutUs from "../components/Home/AboutUs";
 export default function Home() {
   return (
     <>
-      <div className="bg-[url('./assets/bg/bg-1.png')] bg-cover bg-no-repeat bg-center">
+      <div id="home" className="bg-[url('./assets/bg/bg-1.png')] bg-cover bg-no-repeat bg-center">
         <Navbar />
         <Hero />
       </div>
-      <Visions />
-      <Features />
-      <AboutUs />
+      <div id="visions">
+        <Visions />
+      </div>
+      <div id="features">
+        <Features />
+      </div>
+      <div id="aboutus">
+        <AboutUs />
+      </div>
       <Footer />
     </>
   );

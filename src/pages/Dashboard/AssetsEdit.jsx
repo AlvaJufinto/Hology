@@ -13,6 +13,7 @@ import Layout from "../../components/shared/Layout";
 import { auth } from "../../dev/firebase";
 import { getAsset, updateAsset } from "../../services/assets";
 import { onAuthStateChanged } from "firebase/auth";
+import { getTrend } from "../../utils";
 
 const AssetsEdit = () => {
   const navigate = useNavigate();
@@ -25,11 +26,13 @@ const AssetsEdit = () => {
     purchaseDate: "",
     location: "",
     description: "",
+    trend: "",
     documents: [], // This will hold existing docs (as URLs) and new files (as File objects)
   });
   const [loading, setLoading] = useState(true); // Start true to indicate initial data fetch
   const [saving, setSaving] = useState(false); // For the submit button
   const [userId, setUserId] = useState(null);
+  const [trend, setTrend] = useState("");
 
   const assetTypes = [
     "Real Estate",
@@ -113,6 +116,10 @@ const AssetsEdit = () => {
     setSaving(true);
 
     try {
+      formData.trend = getTrend(formData.currentValue, formData.purchaseValue)
+      console.log(formData.currentValue, formData.purchaseValue)
+      console.log(formData)
+      
       // Separate existing document URLs from new File objects
       const existingDocs = formData.documents.filter(
         (doc) => typeof doc === "string"
