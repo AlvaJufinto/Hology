@@ -3,9 +3,9 @@
 import { useEffect, useMemo, useState } from "react";
 
 import { onAuthStateChanged } from "firebase/auth";
-import { DollarSign, Plus, Search } from "lucide-react";
-import { Link } from "react-router-dom";
+import { DollarSign, Search } from "lucide-react";
 
+import NewReportButton from "../../components/Reports/NewReportButton";
 import ReportCard from "../../components/Reports/ReportCard";
 import Layout from "../../components/shared/Layout";
 import { auth } from "../../dev/firebase";
@@ -93,6 +93,7 @@ const Reports = () => {
 
 		return matchesSearch && matchesType && matchesPeriod;
 	});
+	console.log("🚀 ~ Reports ~ filteredReports:", filteredReports);
 
 	return (
 		<Layout>
@@ -107,13 +108,14 @@ const Reports = () => {
 							Kelola laporan aset dan portofolio Anda
 						</p>
 					</div>
-					<Link
+					{/*<Link
 						to="/reports/create"
 						className="mt-4 sm:mt-0 flex items-center px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors"
 					>
 						<Plus className="h-4 w-4 mr-2" />
 						Tambah Laporan
-					</Link>
+					</Link>*/}
+					<NewReportButton />
 				</div>
 
 				{/* Filter */}
@@ -160,7 +162,7 @@ const Reports = () => {
 				</div>
 
 				{/* List */}
-				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+				<div className=" grid grid-cols-1  gap-6">
 					{filteredReports.map((report) => (
 						<ReportCard key={report.id} report={report} />
 					))}
@@ -168,7 +170,9 @@ const Reports = () => {
 
 				{/* Kosong / Loading */}
 				{loading ? (
-					<div className="text-center py-12 text-gray-500">Memuat laporan…</div>
+					<div className=" text-center py-12 text-gray-500">
+						Memuat laporan…
+					</div>
 				) : (
 					filteredReports.length === 0 && (
 						<div className="text-center py-12">
